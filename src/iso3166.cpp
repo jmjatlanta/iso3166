@@ -1,6 +1,7 @@
 #include "iso3166.hpp"
 #include <vector>
 #include <filesystem>
+#include "file_utils.hpp"
 #include "csv.h"
 
 static std::vector<Country> countries;
@@ -9,18 +10,25 @@ std::string to_string(const Country& in)
     return in.name;
 }
 
-std::filesystem::path get_data_dir()
-{
-    return std::filesystem::path{"."};
-}
-
 bool read_csv(const std::string& fileName)
 {
-    io::CSVReader<4, io::trim_chars<' ', '\t'>, io::double_quote_escape<',', '\"'>, io::throw_on_overflow, io::no_comment> in(fileName);
-    in.read_header(io::ignore_extra_column, "Country", "Alpha-2 code", "Alpha-3 code", "Numeric");
+    io::CSVReader<11, io::trim_chars<' ', '\t'>, io::double_quote_escape<',', '\"'>, 
+            io::throw_on_overflow, io::no_comment> in(fileName);
+    in.read_header(io::ignore_extra_column, "name", "alpha-2", "alpha-3", "country-code", 
+            "iso_3166-2", "region", "sub-region", "intermediate-region", 
+            "region-code", "sub-region-code", "intermediate-region-code");
     Country row;
     bool retval = false;
-    while(in.read_row(row.name, row.alpha2, row.alpha3, row.numeric))
+    std::string iso_3166_2;
+    std::string region;
+    std::string sub_region;
+    std::string intermediate_region;
+    std::string region_code;
+    std::string sub_region_code;
+    std::string intermediate_region_code;
+    while(in.read_row(row.name, row.alpha2, row.alpha3, row.numeric, 
+            iso_3166_2, region, sub_region, intermediate_region, 
+            region_code, sub_region_code, intermediate_region_code))
     {
         retval = true;
         countries.push_back(row);
