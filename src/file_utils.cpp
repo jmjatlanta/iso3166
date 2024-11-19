@@ -1,13 +1,11 @@
 #include <filesystem>
+#include <string>
 
-static bool TESTING_ENV = false;
+static std::string dataDir;
 
-void set_testing_environment(bool in) { TESTING_ENV = in; }
+void set_data_dir(const std::string& in) { dataDir = in; }
 
 std::filesystem::path get_data_dir()
 {
-    if (TESTING_ENV)
-        return std::filesystem::path{"/Users/jmjatlanta/Development/cpp/iso3166/test/test_resources"};
-    else
-        return std::filesystem::path{"."};
+    return std::filesystem::path{dataDir};
 }

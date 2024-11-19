@@ -65,3 +65,8 @@ Country Country::byName(const std::string& in)
         return Country{};
     return *itr;
 }
+
+bool Country::nameExists(const std::string& in)
+{
+    return byName(in).numeric != std::numeric_limits<uint16_t>::max();
+}
