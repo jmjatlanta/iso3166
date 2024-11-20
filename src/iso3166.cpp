@@ -59,8 +59,14 @@ void Country::reset()
 Country Country::byName(const std::string& in)
 {
     initialize();
-    auto itr = std::find_if(countries.begin(), countries.end(), [&in](const Country& curr)
-            { return curr.name == in; });
+    std::string lhs = in;
+    std::transform(lhs.begin(), lhs.end(), lhs.begin(), ::tolower);
+    auto itr = std::find_if(countries.begin(), countries.end(), [&lhs](const Country& curr)
+            { 
+                std::string rhs = curr.name;
+                std::transform(rhs.begin(), rhs.end(), rhs.begin(), ::tolower);
+                return lhs == rhs; 
+            });
     if (itr == countries.end())
         return Country{};
     return *itr;
