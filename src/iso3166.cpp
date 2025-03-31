@@ -3,6 +3,8 @@
 #include <filesystem>
 #include "file_utils.hpp"
 #include "csv.h"
+#include "util/Configuration.hpp"
+#include "util/SysLogger.hpp"
 
 static std::vector<Country> countries;
 std::string to_string(const Country& in)
@@ -40,12 +42,13 @@ bool initialize()
 {
     if (countries.size() == 0)
     {
-        std::filesystem::path dataDir = get_data_dir();
-        dataDir /= "iso3166.csv";
+        std::filesystem::path dataDir = util::Configuration::GetValue(util::Configuration::Field::COUNTRY_FILE);
         if (std::filesystem::exists(dataDir))
         {
             return read_csv(dataDir);
         }
+        else
+            util::SysLogger::getInstance()->error("Country::initialize: unable to initialize. File not found: " + dataDir.string());
         return false;
     }
     return true;

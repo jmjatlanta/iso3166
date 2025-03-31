@@ -9,5 +9,7 @@ add_library( ${PROJECT_NAME}
 
 target_include_directories( ${PROJECT_NAME} PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/../fast-cpp-csv-parser
+    ${CMAKE_CURRENT_SOURCE_DIR}/../..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../rapidjson/include
 )
 
